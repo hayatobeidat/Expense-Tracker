@@ -72,21 +72,17 @@ The backend uses CORS so the frontend can read API responses from a different or
 
 ### Desktop
 
-![Desktop view](<Backend test & Final page scr/WebPage.png>)
-![Desktop view](<Backend test & Final page scr/Webpage2.png>)
+![Desktop view](<Backend test & Final page screens/WebPage.png>)
+![Desktop view 2](<Backend test & Final page screens/Webpage2.png>)
 
 ### Mobile
 
-![Mobile view 1](<Backend test & Final page scr/Web Mobile 1.png>)
-
-![Mobile view 2](<Backend test & Final page scr/web mobile 2.png>)
+![Mobile view 1](<Backend test & Final page screens/Web Mobile 1.png>)
+![Mobile view 2](<Backend test & Final page screens/web mobile 2.png>)
 
 ### Delete confirmation
 
-![Delete confirmation](<Backend test & Final page scr/DELETE.png>)
+![Delete confirmation](<Backend test & Final page screens/Delete confirm .png>)
 
 ## What was the hardest part?
-
-## What was the hardest part?
-
 The hardest part for me was learning and using Node.js for the first time. Adding the chart and creating a custom delete confirmation window were also challenging. I practiced and tested each part step by step to understand how it works.
