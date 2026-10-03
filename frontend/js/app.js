@@ -152,12 +152,14 @@ function openEditModal(expense) {
 
     editModal.show();
 }
-// Build table rows using the DOM.
-function renderTable(list) {
+/* Build table rows using the DOM*/
+function renderTable(list) 
+{
     expensesBody.replaceChildren();
     emptyMessage.classList.toggle("d-none", list.length !== 0);
 
-    for (const expense of list) {
+    for (const expense of list) 
+   {
         const row = document.createElement("tr");
         const titleCell = document.createElement("td");
         titleCell.textContent = expense.title;
@@ -173,9 +175,9 @@ function renderTable(list) {
         const dateCell = document.createElement("td");
         dateCell.className = "text-nowrap";
         dateCell.textContent = expense.date;
-          const actionsCell = document.createElement("td");
+        const actionsCell = document.createElement("td");
         actionsCell.className = "text-end text-nowrap";
-       /*Active Edit buttons*/
+        /*Active Edit buttons*/
         const editButton = document.createElement("button");
         editButton.type = "button";
         editButton.className = "btn btn-sm btn-warning me-3";
@@ -183,84 +185,84 @@ function renderTable(list) {
         editButton.addEventListener("click", () => {
             openEditModal(expense);
         });
-       /*Active delete buttons */
-  const deleteButton = document.createElement("button");
-deleteButton.type = "button";
-deleteButton.className = "btn btn-sm btn-primary";
-deleteButton.textContent = "Delete";
+        /*Active delete buttons */
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "btn btn-sm btn-primary";
+        deleteButton.textContent = "Delete";
 
-/*active delete button with confirm message bafor delete  */
-deleteButton.addEventListener("click", () => {
-    pendingDeleteExpense = expense;
-    deleteMessage.textContent =
-        `Are you sure you want to delete "${expense.title}"?`;
- deleteModal.show();
-});
+        /*active delete button with confirm message bafor delete  */
+        deleteButton.addEventListener("click", () => {
+            pendingDeleteExpense = expense;
+            deleteMessage.textContent =
+                `Are you sure you want to delete "${expense.title}"?`;
+            deleteModal.show();
+        });
 
-actionsCell.append(editButton, deleteButton);
-/*confirm delete after confirmation window shown up  */
-confirmDeleteButton.addEventListener("click", async () => {
-    if (!pendingDeleteExpense || confirmDeleteButton.disabled) {
-        return;
-    }
-const expense = pendingDeleteExpense;
-   confirmDeleteButton.disabled = true;
-    confirmDeleteButton.textContent = "Deleting...";
-    clearError();
-    setLoading(true);
-    try {
-        await deleteExpense(expense.id);
-       pendingDeleteExpense = null;
-        deleteModal.hide();
- /* Request the latest list after the server confirms deletion*/
-        await refresh();
-    } catch (error) {
-        deleteMessage.textContent =
-            error instanceof TypeError
-                ? "Cannot connect to the server. Make sure the backend is running on port 3000."
-                : error.message;
-    } finally {
-        confirmDeleteButton.disabled = false;
-        confirmDeleteButton.textContent = "Delete";
-        setLoading(false);
-    }
-});
+        actionsCell.append(editButton, deleteButton);
+        
+        row.append(
+            titleCell,
+            amountCell,
+            categoryCell,
+            dateCell,
+            actionsCell
+        );
 
-row.append(
-    titleCell,
-    amountCell,
-    categoryCell,
-    dateCell,
-    actionsCell
-);
-
-expensesBody.append(row);
+        expensesBody.append(row);
     }
 }
+/*confirm delete after confirmation window shown up  */
+        confirmDeleteButton.addEventListener("click", async () => {
+            if (!pendingDeleteExpense || confirmDeleteButton.disabled) {
+                return;
+            }
+            const expense = pendingDeleteExpense;
+            confirmDeleteButton.disabled = true;
+            confirmDeleteButton.textContent = "Deleting...";
+            clearError();
+            setLoading(true);
+            try {
+                await deleteExpense(expense.id);
+                pendingDeleteExpense = null;
+                deleteModal.hide();
+                /* Request the latest list after the server confirms deletion*/
+                await refresh();
+            } catch (error) {
+                deleteMessage.textContent =
+                    error instanceof TypeError
+                        ? "Cannot connect to the server. Make sure the backend is running on port 3000."
+                        : error.message;
+            } finally {
+                confirmDeleteButton.disabled = false;
+                confirmDeleteButton.textContent = "Delete";
+                setLoading(false);
+            }
+        });
 
 /* Calculate the summary from ALL expenses*/
 function renderSummary(list) {
     let total = 0;
     let highest = null;
-for (const expense of list) {
+    for (const expense of list) {
         total += expense.amount;
 
         if (highest === null || expense.amount > highest.amount) {
             highest = expense;
         }
     }
-  totalAmount.textContent = total.toFixed(2);
+    totalAmount.textContent = total.toFixed(2);
     expenseCount.textContent = list.length;
-   highestAmount.textContent =
+    highestAmount.textContent =
         highest === null ? "0.00" : highest.amount.toFixed(2);
-  highestTitle.textContent =
+    highestTitle.textContent =
         highest === null ? "No expenses" : highest.title;
 }
 
 /*Filter only the table. The summary stays based on all expenses*/
 function applyFilter() {
     const category = categoryFilter.value;
- const filteredExpenses =
+    const filteredExpenses =
         category === "All"
             ? expenses
             : expenses.filter(expense => expense.category === category);
@@ -297,15 +299,29 @@ async function refresh() {
 categoryFilter.addEventListener("change", applyFilter);
 const addForm = document.getElementById("addForm");
 const addButton = document.getElementById("addButton");
+/* Show an error below a form field */
+function showFieldError(fieldId, message) {
+    document.getElementById(fieldId).classList.add("is-invalid");
+    document.getElementById(fieldId + "Error").textContent = message;
+}
 
+/* Clear the previous form errors */
+function clearFieldErrors() {
+    const fields = ["title", "amount", "category", "date"];
+
+    for (const fieldId of fields) {
+        document.getElementById(fieldId).classList.remove("is-invalid");
+        document.getElementById(fieldId + "Error").textContent = "";
+    }
+}
 /*Handle the add form*/
 addForm.addEventListener("submit", async event => {
     event.preventDefault();
 
- /*add success messege alert*/
+    /*add success messege alert*/
     clearTimeout(addSuccessTimer);
     addSuccess.classList.add("d-none");
- clearError();
+    clearError();
 
     const data = {
         title: document.getElementById("title").value.trim(),
@@ -314,36 +330,40 @@ addForm.addEventListener("submit", async event => {
         date: document.getElementById("date").value
     };
 
-    /* Frontend validation*/
+
+    /* Frontend validation rules message  */
+    clearFieldErrors();
+    let hasErrors = false;
     if (data.title === "") {
-        showError("Please enter a title.");
-        return;
+        showFieldError("title", "Title is required.");
+        hasErrors = true;
+    } else if (Array.from(data.title).length > 100) {
+        showFieldError("title", "Title must not exceed 100 characters.");
+        hasErrors = true;
     }
 
-    if (Array.from(data.title).length > 100) {
-        showError("Title must not exceed 100 characters.");
-        return;
-    }
-
-    if (
-        !Number.isFinite(data.amount) ||
-        data.amount < 0.01 ||
-        data.amount > 99999999.99
-    ) {
-        showError("Enter an amount between 0.01 and 99999999.99.");
-        return;
+    if (!Number.isFinite(data.amount) || data.amount <= 0) {
+        showFieldError("amount", "Enter an amount greater than 0.");
+        hasErrors = true;
+    } else if (data.amount < 0.01 || data.amount > 99999999.99) {
+        showFieldError("amount", "Enter an amount between 0.01 and 99999999.99.");
+        hasErrors = true;
     }
 
     if (!Object.hasOwn(categoryColors, data.category)) {
-        showError("Please choose a valid category.");
-        return;
+        showFieldError("category", "Choose a category.");
+        hasErrors = true;
     }
 
     if (!data.date) {
-        showError("Please choose a date.");
-        return;
+        showFieldError("date", "Choose a date.");
+        hasErrors = true;
     }
 
+    if (hasErrors) {
+        addForm.querySelector(".is-invalid").focus();
+        return;
+    }
     addButton.disabled = true;
     setLoading(true);
 
