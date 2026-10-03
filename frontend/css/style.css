@@ -1,0 +1,59 @@
+/*for using grid css for cards */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+/* Stack the cards on smaller screens. */
+@media (max-width: 767px) {
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/*logo for the title */
+.app-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.logo-icon {
+     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background-color: #d9efff;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}
+.navbar-brand {   font-family: Georgia, "Times New Roman", serif;
+                  font-size: 1.5rem;
+                  font-weight: bold;}
+
+/*darkmood*/
+body {
+    background-color: var(--bs-tertiary-bg);
+    color: var(--bs-body-color);
+}
+/*chart*/
+.chart-container {
+    position: relative;
+    height: 200px;
+}
+/*backdround color in the light mood */
+html[data-bs-theme="light"] body {
+    background-color: #eaf6ff;
+}
+html[data-bs-theme="dark"] body {
+    background-color: var(--bs-tertiary-bg);
+}
+/* Delete confirmation box */
+.delete-modal-box {
+    background-color: #eaf6ff;
+    color: #212529;
+    border: 1px solid #b6dfff;
+    border-radius: 16px;
+}
