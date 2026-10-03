@@ -73,8 +73,7 @@ The backend uses CORS so the frontend can read API responses from a different or
 ### Desktop
 
 ![Desktop view](<Backend test & Final page screens/WebPage.png>)
-![Desktop view 2](<Backend test & Final page screens/Webpage2.png>)
-
+![Desktop view 2](<Backend test & Final page screens/webpage2.png>)
 ### Mobile
 
 ![Mobile view 1](<Backend test & Final page screens/Web Mobile 1.png>)
